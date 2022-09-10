@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <title>Projeto base</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="page-title">Conversor de moedas</h1>
+      <p class="page-subtitle">Descubra os valores das moedas</p>
+      <label for="moeda-origem">Qual a moeda de origem?</label><br />
+      <input type="text" id="moeda-origem" value="USD" /><br />
+      <label for="moeda-destino">Qual a moeda de destino?</label><br />
+      <input type="text" id="moeda-destino" value="BRL" /><br />
+      <label for="valor">Qual o valor?</label><br />
+      <input type="number" id="valor" size="2" /><br />
+
+      <button type="submit" id="button-convert">Converter</button>
+      <p><label for="" id="label-value-moeda"></label></p>
+      <h2 id="valorConvertido"></h2>
+    </div>
+
+    <script defer src="./js/script.js"></script>
+  </body>
+</html>
