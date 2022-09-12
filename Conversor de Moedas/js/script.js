@@ -1,4 +1,6 @@
 start();
+let isFirstConversion = true;
+let valueFirstConverted = 0.0;
 function start() {
   checkButtonConvert();
 }
@@ -9,16 +11,19 @@ function checkButtonConvert() {
 }
 
 function converter() {
-  let moedas = stringMoedas();
-  let link = createRequestLink(moedas);
-  requestJSON(link);
+  primeiraConversao();
+  isFirstConversion = true;
+  valueFirstConverted = 0.0;
 }
 
-function stringMoedas() {
+function primeiraConversao() {
   let moedaOrigem = extractMoedaOrigem();
-  let moedaDestino = extractMoedaDestino();
+  let moedaDestino = 'USD';
 
-  return (stringConversao = moedaOrigem + '-' + moedaDestino);
+  let linkPrimeiraConversao = createRequestLink(
+    moedaOrigem + '-' + moedaDestino
+  );
+  requestJSON(linkPrimeiraConversao);
 }
 
 function extractMoedaOrigem() {
@@ -46,8 +51,24 @@ function requestJSON(requestLink) {
   request.onload = function () {
     let conversor = request.response;
     let cambio = JSONToNumber(conversor);
-    convertValue(cambio);
+
+    if (isFirstConversion) {
+      convertValue(cambio);
+    } else {
+      convertValue(cambio);
+      isFirstConversion = true;
+    }
   };
+}
+
+function segundaConversao() {
+  let moedaOrigem = 'USD';
+  let moedaDestino = extractMoedaDestino();
+
+  let linkSegundaConversao = createRequestLink(
+    moedaOrigem + '-' + moedaDestino
+  );
+  requestJSON(linkSegundaConversao);
 }
 
 function JSONToNumber(conversor) {
@@ -60,11 +81,17 @@ function JSONToNumber(conversor) {
 }
 
 function convertValue(cambio) {
-  let stringValue = document.getElementById('valor').value;
-  let value = parseFloat(stringValue);
-  let valueConverted = value * cambio;
-  valueConverted = valueConverted.toFixed(2);
+  if (isFirstConversion) {
+    let stringValue = document.getElementById('valor').value;
+    let value = parseFloat(stringValue);
+    valueFirstConverted = value * cambio;
+    isFirstConversion = false;
+    segundaConversao();
+  } else {
+    valueConverted = valueFirstConverted * cambio;
+    valueConverted = valueConverted.toFixed(2);
 
-  let labelResult = document.getElementById('label-value-moeda');
-  labelResult.innerHTML = 'O valor será: ' + String(valueConverted);
+    let labelResult = document.getElementById('label-value-moeda');
+    labelResult.innerHTML = 'O valor será: ' + String(valueConverted);
+  }
 }
